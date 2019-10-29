@@ -7,28 +7,157 @@
     <!--当有返回值的时候，需要指定返回值的类型；
         不过当返回的是集合的时候，我们只需要指定集合中元素的类型就行了-->
 
-    <select id="list" resultType="Category">
-        select * from category_;
-    </select>
+
     <insert id="add" parameterType="Category">
         insert into category_ (name) values (#{name})
     </insert>
+
+
+    <!--=================================set 标签===================================================-->
+
     <update id="update" parameterType="Category">
-        update category_ set name = (#{name}) where id = (#{id})
+        update category_
+        <!-- 假设 category_ 有 number 字段-->
+        <!-- 当 update 语句需要给多个 字段的时候复制的时候
+             set 标签就可以类似 where 标签那样，其效果与where标签类似，有数据的时候才进行设置。
+             注意： set 标签设置字段值的时候，除了最后一个不需要逗号外
+                    设置其他数据的时候都需要末尾都需要一个逗号。-->
+        <set>
+            <if test="number != null">number = #{numer},</if>
+            <if test="name != null">name = #{name}</if>
+        </set>
+        where id = (#{id})
     </update>
+
+    <!--=================================set 标签===================================================-->
+
     <delete id="delete" parameterType="_int">
         delete from category_ where id = (#{id})
     </delete>
 
-    <!--模糊查询，根据名字进行模糊参数，
-        concat()函数是 mysql 的函数-->
-    <select id="listCategoryByName" parameterType="string" resultType="Category">
-        select * from category_ where name like concat('%', #{name}, '%')
+
+
+    <!--=================================if 标签===================================================-->
+    <!--使用动态查询 if 标签，可以将下面三条sql 语句合并为一条-->
+    <select id="listCategoryByNameOrPagination" parameterType="map" resultType="Category">
+        select * from category_
+        <!-- 当 name 参数不为空的时候， 动态SQL 语句会拼接下面 where 子句的 -->
+        <if test="name != null">
+            where name like concat('%', #{name}, '%')
+        </if>
+        <if test="start != null and count != null">
+            limit #{start}, #{count}
+        </if>
+    </select>
+    <!--=================================if 标签===================================================-->
+
+
+    <!--=================================where 标签===================================================-->
+
+    <!--但是当 where 子句里面有多个参数的时候，使用多个 if 标签会容易出错。
+        当需要多个 if 标签的时候， 我们需要使用 where 标签配合 if 标签一起使用。
+        where 标签相当于 是 sql 语句中的 where 关键字。
+        注意：  <where>标签会进行自动判断
+                如果任何条件都不成立，那么就在sql语句里就不会出现where关键字
+                如果有任何条件成立，会自动去掉多出来的 and 或者 or。
+    -->
+    <select id="listCategory" parameterType="map" resultType="Category">
+        select * from category_
+        <where>
+            <if test="name != null">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="id != null">
+                and id > #{id}
+            </if>
+        </where>
+    </select>
+    <!--=================================where 标签===================================================-->
+
+    <!--=================================trim 标签===================================================-->
+
+    <!--trim 用来定制想要的功能，比如where标签就可以用-->
+    <!--<trim prefix="WHERE" prefixOverrides="AND |OR ">
+        ...
+    </trim>-->
+
+    <!--set标签就可以用-->
+    <!--<trim prefix="SET" suffixOverrides=",">
+        ...
+    </trim>-->
+    <!--=================================trim 标签===================================================-->
+
+    <!--=================================when otherwise 标签===================================================-->
+    <select id="listCategory2" parameterType="map" resultType="Category">
+        select * from category_
+        <where>
+            <choose>
+                <when test="name != null">
+                    and name like concat('%', #{name}, '%')
+                </when>
+                <otherwise>
+                    id > 10
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
-    <!--分页查询， 因为需要多个参数，所以封装到 Map 中-->
-    <select id="pagination" parameterType="map" resultType="Category">
-        select * from category_ limit #{start}, #{count}
+
+    <!--=================================when otherwise 标签===================================================-->
+
+    <!--=================================foreach 标签===================================================-->
+    <!--foreach 标签进行一些迭代操作的时候会很方便-->
+    <select id="listCategoryById" resultType="Category" parameterType="list">
+        select * from category_
+            where id in
+            <!-- 迭代 dao 方法传递过来的 List 集合
+                完整的 sql 语句是 select * from category_ wher id in (1,2,4,5,6,7.....) 形式-->
+
+            <!-- foreach用于迭代数组元素
+                collection： 迭代的集合类型，类型是 Mybait的 类型别名
+               open表示开始符号
+               close表示结束符合
+               separator表示元素间的分隔符
+               item表示迭代的数组，属性值可以任意，但提倡与方法的数组名相同
+               #{ids}表示数组中的每个元素值
+           -->
+            <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
     </select>
+
+
+    <!--=================================foreach 标签===================================================-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<select id="list" resultType="Category">-->
+        <!--select * from category_;-->
+    <!--</select>-->
+    <!--&lt;!&ndash;模糊查询，根据名字进行模糊参数，-->
+        <!--concat()函数是 mysql 的函数&ndash;&gt;-->
+    <!--<select id="listCategoryByName" parameterType="string" resultType="Category">-->
+        <!--select * from category_ where name like concat('%', #{name}, '%')-->
+    <!--</select>-->
+    <!--分页查询， 因为需要多个参数，所以封装到 Map 中-->
+    <!--<select id="pagination" parameterType="map" resultType="Category">-->
+        <!--select * from category_ limit #{start}, #{count}-->
+    <!--</select>-->
+
+
+
+
 
 </mapper>
