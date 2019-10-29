@@ -135,4 +135,22 @@ public class CategoryDAO {
         }
         return categories;
     }
+
+    //一对多关系： Category 对 Product
+    public List<Category> listCategory() {
+        List<Category> categories = new ArrayList<>();
+        SqlSession sqlSession = MybatisUtil.getSqlSession();
+        try {
+            categories = sqlSession.selectList("listCategory");
+            sqlSession.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw e;
+        } finally {
+            MybatisUtil.closeSqlSession();
+        }
+        return categories;
+    }
+
 }

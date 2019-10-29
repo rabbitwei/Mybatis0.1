@@ -23,5 +23,8 @@
     </environments>
     <mappers>
         <mapper resource="cn/rabbit/pojo/Category.xml"/>
+        <mapper resource="cn/rabbit/pojo/Product.xml"/>
+        <mapper resource="cn/rabbit/pojo/Order.xml"/>
+        <mapper resource="cn/rabbit/pojo/OrderItem.xml"/>
     </mappers>
 </configuration>

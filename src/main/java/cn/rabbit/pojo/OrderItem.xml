@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rabbit.pojo">
+
+    <sql id="name">
+        <trim prefixOverrides=",">
+          <if test="id != null">
+              oid,
+          </if>
+            <if test="id != null">
+                pid,
+            </if>
+            <if test="id != null">
+                `number`
+            </if>
+        </trim>
+    </sql>
+    <sql id="value">
+        <trim prefixOverrides=",">
+            <if test="id != null">
+                #{order.id},
+            </if>
+            <if test="id != null">
+                #{product.id},
+            </if>
+            <if test="id != null">
+                #{number}
+            </if>
+
+        </trim>
+    </sql>
+
+
+    <!--不要忘了括号-->
+    <insert id="addOrderItem" parameterType="OrderItem">
+        insert into order_item_ (<include refid="name"/> )
+        values (<include refid="value"/> )
+    </insert>
+
+    <delete id="deleteOrderItem" parameterType="map">
+        delete from order_item_ where pid = #{pid} and oid = #{oid}
+    </delete>
+
+
+</mapper>

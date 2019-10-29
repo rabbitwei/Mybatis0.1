@@ -3,7 +3,10 @@ package cn.rabbit;
 
 import cn.rabbit.dao.CategoryDAO;
 import cn.rabbit.pojo.Category;
+import cn.rabbit.pojo.Product;
 import org.junit.Test;
+
+import java.util.List;
 
 public class CategoryDAOTest {
 
@@ -41,5 +44,17 @@ public class CategoryDAOTest {
     @Test
     public void pagination() {
         System.out.println(categoryDAO.pagination(0, 5));
+    }
+
+    @Test
+    public void listCategory() {
+        List<Category> cs = categoryDAO.listCategory();
+        for (Category c : cs) {
+            System.out.println(c);
+            List<Product> ps = c.getProducts();
+            for (Product p : ps) {
+                System.out.println("\t"+p);
+            }
+        }
     }
 }

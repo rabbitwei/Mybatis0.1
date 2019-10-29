@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rabbit.pojo">
+    <!--=============================关系映射===============================================-->
+                                <!--多对一的关系-->
+    <!--
+        resultMap把数据取出来放在对应的 对象属性里,
+        当列名与对象属性名不同的时候，我们需要使用 resultMap 进行字段和属性的对应
+        注： Category的id 字段 和Product的id字段同名，Mybatis不知道谁是谁的，所以需要通过取别名cid,pid来区分。
+name字段同理。
+    -->
+    <resultMap id="productBean" type="Product">
+        <!--id 是主键-->
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <result column="price" property="price"/>
+
+        <!-- 多对一的关系，使用 association 标签 -->
+        <!-- property: 指的是属性名称, javaType：指的是属性的类型 -->
+        <association property="category" javaType="Category">
+            <!--id是主键-->
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+        </association>
+    </resultMap>
+
+    <!--使用左外连接进行多表查询-->
+    <select id="listProduct" resultMap="productBean">
+        select p.id 'pid', c.id 'cid', p.name 'pname', c.name 'cname'
+        from product_ p left join category_ c
+        on p.cid = c.id
+    </select>
+
+    <select id="getProduct" resultType="Product" parameterType="_int">
+        select * from product_ where id = #{id}
+    </select>
+
+</mapper>

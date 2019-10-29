@@ -6,7 +6,6 @@
 
     <!--当有返回值的时候，需要指定返回值的类型；
         不过当返回的是集合的时候，我们只需要指定集合中元素的类型就行了-->
-
     <select id="list" resultType="Category">
         select * from category_;
     </select>
@@ -30,5 +29,42 @@
     <select id="pagination" parameterType="map" resultType="Category">
         select * from category_ limit #{start}, #{count}
     </select>
+
+
+    <!--=============================关系映射===============================================-->
+                                <!--一对多的关系-->
+    <!--
+        resultMap把数据取出来放在对应的 对象属性里,
+        当列名与对象属性名不同的时候，我们需要使用 resultMap 进行字段和属性的对应
+        注： Category的id 字段 和Product的id字段同名，Mybatis不知道谁是谁的，所以需要通过取别名cid,pid来区分。
+name字段同理。
+    -->
+    <resultMap type="Category" id="categoryBean">
+        <!--property: 是pojo 对象的属性名
+            column: 是 Mybatis 新构建的一张临时表的列名， 不是数据库中的列名-->
+        <!--id是主键-->
+        <id property="id" column="cid"/>
+        <result property="name" column="cname"/>
+        <!--一对多使用的是 collection 标签,
+        注意 ofType 属性，该属性的作用是： 用来将 JavaBean（或字段）属性的类型和集合存储的类型区分开来
+        -->
+        <collection property="products" ofType="Product">
+            <!--id是主键-->
+            <id property="id" column="pid"/>
+            <result property="name" column="pname"/>
+            <result property="price" column="price"/>
+        </collection>
+    </resultMap>
+
+    <!--使用左连接来进行多表查询-->
+    <select id="listCategory" resultMap="categoryBean">
+        select c.*, p.*, c.id 'cid', p.id 'pid', c.name 'cname', p.name 'pname'
+        from category_ c left join product_ p
+        on c.id = p.cid
+    </select>
+
+    <!--=============================关系映射===============================================-->
+
+
 
 </mapper>
