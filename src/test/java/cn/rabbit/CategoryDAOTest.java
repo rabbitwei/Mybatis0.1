@@ -3,6 +3,7 @@ package cn.rabbit;
 
 import cn.rabbit.mapper.ICategoryMapper;
 import cn.rabbit.pojo.Category;
+import cn.rabbit.pojo.Product;
 import cn.rabbit.util.MybatisUtil;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSession;
@@ -10,15 +11,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 public class CategoryDAOTest {
     private SqlSession sqlSession;
     private ICategoryMapper mapper;
+
     @Before
     public void initSqlSession() {
         sqlSession = MybatisUtil.getSqlSession();
-        //使用Mapper接口，不在使用session直接操作了，没有没有了映射sql语句的id。
+        //使用Mapper接口，不在使用session直接操作了，因为没有了映射sql语句的id。
         mapper = sqlSession.getMapper(ICategoryMapper.class);
     }
+
     @After
     public void closeSqlSession() {
         //记住：除了查询，其他操作都需要提交事务的，否则就会看到
@@ -26,10 +31,12 @@ public class CategoryDAOTest {
         sqlSession.commit();
         MybatisUtil.closeSqlSession();
     }
+
     @Test
     public void listCategory() {
         System.out.println(mapper.listCategory());
     }
+
     @Test
     public void getCategory() {
         System.out.println(mapper.getCategory(21));
@@ -59,4 +66,17 @@ public class CategoryDAOTest {
         mapper.updateCategory(c);
         listCategory();
     }
+
+    //===================================一对多的测试方法===============================
+    @Test
+    public void listCategory2() {
+        List<Category> categories = mapper.listCategory();
+        for (Category c : categories) {
+            System.out.println(c.getId() + c.getName());
+            for (Product p : c.getProducts())
+                System.out.print("\t"+p + "\n");
+        }
+    }
+
+
 }

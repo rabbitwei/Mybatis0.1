@@ -29,5 +29,8 @@
 
         <!--注意： class使用的是点， resource使用的反斜杠-->
         <mapper class="cn.rabbit.mapper.ICategoryMapper"/>
+        <mapper class="cn.rabbit.mapper.IProductMapper"/>
+        <mapper class="cn.rabbit.mapper.IOrderMapper"/>
+        <mapper class="cn.rabbit.mapper.IOrderItemMapper"/>
     </mappers>
 </configuration>

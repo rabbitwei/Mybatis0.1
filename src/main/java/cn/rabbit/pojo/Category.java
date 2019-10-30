@@ -1,5 +1,7 @@
 package cn.rabbit.pojo;
 
+import java.util.List;
+
 public class Category {
     public int getId() {
         return id;
@@ -17,14 +19,26 @@ public class Category {
         this.name = name;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public String toString() {
-        return "Category{" +
+        return "Category[" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                '}';
+                ']';
     }
 
     private int id;
     private String name;
+    private List<Product> products;
+
+
+
 }
