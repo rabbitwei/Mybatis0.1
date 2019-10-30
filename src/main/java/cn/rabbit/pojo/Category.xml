@@ -10,6 +10,9 @@
         select * from category_;
     </select>
     <insert id="add" parameterType="Category">
+        <selectKey order="AFTER" keyProperty="id" resultType="int">
+            select last_insert_id();
+        </selectKey>
         insert into category_ (name) values (#{name})
     </insert>
     <update id="update" parameterType="Category">
