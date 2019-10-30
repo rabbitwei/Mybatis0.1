@@ -16,7 +16,7 @@ public interface IOrderItemMapper {
     //然后通过 pid 字段来获取product的属性值
     @Results({
             @Result(property = "product", column = "pid",
-                    one = @One(select = "cn.rabbit.mapper.IProductMapper.get"))
+                    one = @One(select = "cn.rabbit.mapper.IProductMapper.getProduct"))
     })
     List<OrderItem> listByOrder(int oid);
 }
