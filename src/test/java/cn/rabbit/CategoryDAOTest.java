@@ -1,45 +1,64 @@
 package cn.rabbit;
 
 
-import cn.rabbit.dao.CategoryDAO;
+import cn.rabbit.mapper.ICategoryMapper;
 import cn.rabbit.pojo.Category;
+import cn.rabbit.util.MybatisUtil;
+import org.apache.ibatis.session.SqlSession;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CategoryDAOTest {
+    private SqlSession sqlSession;
+    private ICategoryMapper mapper;
+    private int id = 12;
+    @Before
+    public void getSqlSession() {
+        sqlSession = MybatisUtil.getSqlSession();
+        mapper = sqlSession.getMapper(ICategoryMapper.class);
+    }
 
-    private CategoryDAO categoryDAO = new CategoryDAO();
+    @After
+    public void closeSqlSession() {
+        sqlSession.commit();
+        list();
+        MybatisUtil.closeSqlSession();
+    }
+
 
     @Test
     public void add() {
         Category c = new Category();
         c.setName("数码");
-        categoryDAO.add(c);
+        mapper.add(c);
     }
     @Test
     public void list() {
-        System.out.println(categoryDAO.list());
+        System.out.println(mapper.list());
     }
 
     @Test
     public void update() {
         Category c = new Category();
-        c.setId(10);
+        c.setId(id);
         c.setName("testhaha");
-        categoryDAO.update(c);
+        mapper.update(c);
     }
 
     @Test
     public void delete() {
-        categoryDAO.delete(10);
+        mapper.delete(id);
     }
 
     @Test
-    public void listCategoryByName() {
-        System.out.println(categoryDAO.listCategoryByName("tem"));
+    public void get() {
+        System.out.println(mapper.get(id));
     }
 
-    @Test
-    public void pagination() {
-        System.out.println(categoryDAO.pagination(0, 5));
-    }
+
+
+
+
+
 }
