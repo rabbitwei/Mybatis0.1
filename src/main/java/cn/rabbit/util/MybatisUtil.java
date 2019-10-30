@@ -19,7 +19,7 @@ public class MybatisUtil {
     private MybatisUtil() {
     }
 
-    /**
+    /*
      * 加载位于 resources/mybatis-config.xml 配置文件
      */
     static {

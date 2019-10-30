@@ -3,9 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
     <typeAliases>
         <package name="cn.rabbit.pojo"/>
     </typeAliases>
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC" />
@@ -22,6 +24,10 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="cn/rabbit/pojo/Category.xml"/>
+        <!--因为使用的注解，不需要映射SQL语句的配置文件了-->
+        <!--<mapper resource="cn/rabbit/pojo/Category.xml"/>-->
+
+        <!--注意： class使用的是点， resource使用的反斜杠-->
+        <mapper class="cn.rabbit.mapper.ICategoryMapper"/>
     </mappers>
 </configuration>
