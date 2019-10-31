@@ -22,6 +22,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="cn/rabbit/pojo/Category.xml"/>
+        <mapper resource="cn/rabbit/mapper/Category.xml"/>
     </mappers>
 </configuration>
