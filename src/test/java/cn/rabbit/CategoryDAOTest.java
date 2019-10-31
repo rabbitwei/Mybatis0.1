@@ -3,6 +3,7 @@ package cn.rabbit;
 
 import cn.rabbit.dao.CategoryDAO;
 import cn.rabbit.pojo.Category;
+import com.github.pagehelper.PageHelper;
 import org.junit.Test;
 
 public class CategoryDAOTest {
@@ -40,6 +41,7 @@ public class CategoryDAOTest {
 
     @Test
     public void pagination() {
-        System.out.println(categoryDAO.pagination(0, 5));
+        PageHelper.offsetPage(0, 5);
+        System.out.println(categoryDAO.list());
     }
 }

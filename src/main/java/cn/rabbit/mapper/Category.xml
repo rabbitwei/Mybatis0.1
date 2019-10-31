@@ -8,7 +8,7 @@
         不过当返回的是集合的时候，我们只需要指定集合中元素的类型就行了-->
 
     <select id="list" resultType="Category">
-        select * from category_;
+        select * from category_
     </select>
     <insert id="add" parameterType="Category">
         insert into category_ (name) values (#{name})
@@ -28,7 +28,10 @@
 
     <!--分页查询， 因为需要多个参数，所以封装到 Map 中-->
     <select id="pagination" parameterType="map" resultType="Category">
-        select * from category_ limit #{start}, #{count}
+        select * from category_
+        <if test="start != null and count != null">
+            limit #{start}, #{count}
+        </if>
     </select>
 
 </mapper>
