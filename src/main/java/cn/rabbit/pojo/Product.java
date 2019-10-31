@@ -32,12 +32,12 @@ public class Product {
         this.category = category;
     }
     public int getCid() {
-        System.out.println("获取值");
+//        System.out.println("获取值");
         return cid;
     }
 
     public void setCid(int cid) {
-        System.out.println("设置值");
+//        System.out.println("设置值");
         this.cid = cid;
     }
 
