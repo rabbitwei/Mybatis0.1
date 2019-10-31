@@ -1,8 +1,9 @@
 package cn.rabbit.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Category {
+public class Category implements Serializable {
     public int getId() {
         return id;
     }

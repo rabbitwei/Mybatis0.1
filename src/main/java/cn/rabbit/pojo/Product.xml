@@ -11,6 +11,7 @@
         注： Category的id 字段 和Product的id字段同名，Mybatis不知道谁是谁的，所以需要通过取别名cid,pid来区分。
 name字段同理。
     -->
+    <cache/>
     <resultMap id="productBean" type="Product">
         <!--id 是主键-->
         <id column="pid" property="id"/>

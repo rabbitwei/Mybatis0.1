@@ -1,6 +1,8 @@
 package cn.rabbit.pojo;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     public int getId() {
         return id;
     }
